@@ -9,16 +9,18 @@ export async function GET(request: NextRequest) {
     await prisma.$connect();
 
     const params = request.nextUrl.searchParams;
-    const statusId = params.get("statusId");
-    const createdAt = params.get("createdAt");
+    const statusId = Number(params.get("statusId"));
+    const createdAt = Number(params.get("createdAt"));
 
     const where = {};
-    if (statusId) {
-      Object.assign(where, { statusId: Number(statusId) });
+    if (statusId > 0) {
+      Object.assign(where, { statusId: statusId });
     }
 
     const orderBy = {};
-    Object.assign(orderBy, { createdAt: Number(createdAt) ? "asc" : "desc" });
+    Object.assign(orderBy, {
+      createdAt: Number(createdAt === 1) ? "asc" : "desc",
+    });
 
     const result = await prisma.todo.findMany({
       include: {
@@ -36,7 +38,10 @@ export async function GET(request: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
-    return NextResponse.json({ message: "Error", error }, { status: 500 });
+    return NextResponse.json(
+      { message: "Error", result: error },
+      { status: 500 }
+    );
   } finally {
     await prisma.$disconnect();
   }
@@ -47,12 +52,18 @@ export async function POST(request: Request) {
   try {
     const { title, memo, statusId } = await request.json();
     await prisma.$connect();
-    const todo = await prisma.todo.create({
+    const result = await prisma.todo.create({
       data: { title, memo, statusId },
     });
-    return NextResponse.json({ message: "Success", todo }, { status: 201 });
+    return NextResponse.json(
+      { message: "Success", result: result },
+      { status: 201 }
+    );
   } catch (error) {
-    return NextResponse.json({ message: "Error", error }, { status: 500 });
+    return NextResponse.json(
+      { message: "Error", result: error },
+      { status: 500 }
+    );
   } finally {
     await prisma.$disconnect();
   }

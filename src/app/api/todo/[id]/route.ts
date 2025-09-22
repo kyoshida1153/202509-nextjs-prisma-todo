@@ -16,9 +16,18 @@ export async function GET(request: Request) {
       where: { id },
     });
 
-    return NextResponse.json(result);
+    return NextResponse.json(
+      {
+        message: "Success",
+        result: result,
+      },
+      { status: 200 }
+    );
   } catch (error) {
-    return NextResponse.json({ message: "Error", error }, { status: 500 });
+    return NextResponse.json(
+      { message: "Error", result: error },
+      { status: 500 }
+    );
   } finally {
     await prisma.$disconnect();
   }
@@ -36,9 +45,15 @@ export async function PUT(request: Request) {
       where: { id },
     });
 
-    return NextResponse.json({ message: "Success", result }, { status: 200 });
+    return NextResponse.json(
+      { message: "Success", result: result },
+      { status: 200 }
+    );
   } catch (error) {
-    return NextResponse.json({ message: "Error", error }, { status: 500 });
+    return NextResponse.json(
+      { message: "Error", result: error },
+      { status: 500 }
+    );
   } finally {
     await prisma.$disconnect();
   }
@@ -54,9 +69,15 @@ export async function DELETE(request: Request) {
       where: { id },
     });
 
-    return NextResponse.json({ message: "Success", result }, { status: 200 });
+    return NextResponse.json(
+      { message: "Success", result: result },
+      { status: 200 }
+    );
   } catch (error) {
-    return NextResponse.json({ message: "Error", error }, { status: 500 });
+    return NextResponse.json(
+      { message: "Error", result: error },
+      { status: 500 }
+    );
   } finally {
     await prisma.$disconnect();
   }
