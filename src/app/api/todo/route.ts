@@ -1,7 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import prisma from "@/lib/prisma";
 
 // 一覧取得
 export async function GET(request: NextRequest) {
@@ -50,10 +48,12 @@ export async function GET(request: NextRequest) {
 // 投稿
 export async function POST(request: Request) {
   try {
+    const userId = "aff135e2-f612-406e-afe6-3b0bff888c0b";
+
     const { title, memo, statusId } = await request.json();
     await prisma.$connect();
     const result = await prisma.todo.create({
-      data: { title, memo, statusId },
+      data: { title, memo, statusId, userId },
     });
     return NextResponse.json(
       { message: "Success", result: result },

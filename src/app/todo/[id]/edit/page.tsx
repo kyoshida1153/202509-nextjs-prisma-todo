@@ -9,7 +9,7 @@ export default async function TodoEditPage({
   const { id } = await params;
 
   return (
-    <main className="flex flex-col gap-[2em] w-full max-w-[500px]">
+    <>
       <div className="text-sm">
         <Link href="/">TOP</Link> &gt; TODOの編集
       </div>
@@ -19,6 +19,6 @@ export default async function TodoEditPage({
       </h1>
 
       <TodoEditForm id={id} />
-    </main>
+    </>
   );
 }

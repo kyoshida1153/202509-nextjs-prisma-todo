@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { redirect } from "next/navigation";
-import { Loading } from "@/components/common/loading";
+import { Loading } from "@/components/loading";
 import { TodoWithStatus } from "../types";
 
 type Props = {

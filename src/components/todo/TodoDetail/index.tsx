@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { Loading } from "@/components/common/loading";
+import { Loading } from "@/components/loading";
 import { TodoWithStatus } from "../types";
 
 type Props = {

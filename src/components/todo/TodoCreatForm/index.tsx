@@ -1,7 +1,7 @@
 "use client";
 import { useState, useRef } from "react";
 import { redirect } from "next/navigation";
-import { Loading } from "@/components/common/loading";
+import { Loading } from "@/components/loading";
 
 export default function TodoCreatForm() {
   const [loading, setLoading] = useState<boolean>(false);

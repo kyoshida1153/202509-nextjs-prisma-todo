@@ -9,7 +9,7 @@ export default async function TodoDetailPage({
   const { id } = await params;
 
   return (
-    <main className="flex flex-col gap-[2em] w-full max-w-[500px]">
+    <>
       <div className="text-sm">
         <Link href="/">TOP</Link> &gt; TODOの詳細
       </div>
@@ -19,6 +19,6 @@ export default async function TodoDetailPage({
       </h1>
 
       <TodoDetail id={id} />
-    </main>
+    </>
   );
 }

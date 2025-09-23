@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function TodoAddPage() {
   return (
-    <main className="flex flex-col gap-[2em] w-full max-w-[500px]">
+    <>
       <div className="text-sm">
         <Link href="/">TOP</Link> &gt; TODOの作成
       </div>
@@ -13,6 +13,6 @@ export default function TodoAddPage() {
       </h1>
 
       <TodoCreatForm />
-    </main>
+    </>
   );
 }

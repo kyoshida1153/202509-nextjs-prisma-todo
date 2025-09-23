@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useTodosStore } from "../stores";
 import Link from "next/link";
-import { Loading } from "@/components/common/loading";
+import { Loading } from "@/components/loading";
 import { formatDate } from "@/utils";
 
 export default function TodoList() {
