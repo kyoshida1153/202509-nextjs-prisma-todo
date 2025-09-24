@@ -40,11 +40,18 @@ export default async function RootLayout({
           <LoginModal />
 
           <Navigation currentUser={currentUser} />
-          <div className="antialiased flex items-center flex-col p-4 md:p-12">
-            <main className="flex flex-col gap-4 w-full max-w-[500px]">
-              {children}
-            </main>
-          </div>
+
+          {currentUser ? (
+            <div className="antialiased flex items-center flex-col p-4 md:p-12">
+              <main className="flex flex-col gap-4 w-full max-w-[500px]">
+                {children}
+              </main>
+            </div>
+          ) : (
+            <div className="text-center text-base p-4">
+              <div>ログインしてください。</div>
+            </div>
+          )}
         </AuthContext>
       </body>
     </html>

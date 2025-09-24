@@ -16,7 +16,7 @@ const getCurrentUser = async () => {
     // ログインユーザー取得
     const response = await prisma.user.findUnique({
       where: {
-        email: session.user.email,
+        email: session?.user?.email,
       },
     });
 

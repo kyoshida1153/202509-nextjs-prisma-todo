@@ -1,6 +1,6 @@
 "use client";
 
-import { FieldValues, UseFormRegister } from "react-hook-form";
+import { FieldValues, UseFormRegister, FieldErrors } from "react-hook-form";
 
 type TextareaProps = {
   id: string;
@@ -8,7 +8,7 @@ type TextareaProps = {
   disabled?: boolean;
   required?: boolean;
   register: UseFormRegister<FieldValues>;
-  errors: any;
+  errors: FieldErrors;
 };
 
 const Textarea: React.FC<TextareaProps> = ({
@@ -39,7 +39,7 @@ const Textarea: React.FC<TextareaProps> = ({
 
       {errors[id] && (
         <div className="my-3 text-center text-sm text-red-500">
-          {errors[id].message}
+          {errors[id].message as string}
         </div>
       )}
     </div>

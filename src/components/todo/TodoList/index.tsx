@@ -1,17 +1,18 @@
 "use client";
-import { useEffect, useState } from "react";
-import { useTodosStore } from "../stores";
+import { useEffect } from "react";
+import { useTodoListState, useTodosStore } from "../stores";
 import Link from "next/link";
 import { Loading } from "@/components/loading";
 import { formatDate } from "@/utils";
 
 export default function TodoList() {
   const { todos, setTodos } = useTodosStore();
-  const [loading, setLoading] = useState<boolean>(true);
-  const [displayMessage, setDisplayMessage] = useState<string>("");
+  const { loading, setLoading, displayMessage, setDisplayMessage } =
+    useTodoListState();
 
   useEffect(() => {
     const getTodos = async () => {
+      setLoading(true);
       try {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/todo`,
@@ -22,14 +23,15 @@ export default function TodoList() {
         );
 
         if (!response.ok) {
-          throw new Error(`response.status: ${response.status}`);
+          throw new Error(`ステータスコード: ${response.status}`);
         }
 
         const { message, result } = await response.json();
-        // console.log(message, result);
+        console.log(message, result);
+        // const { result } = await response.json();
         setTodos(result);
 
-        if (!result) {
+        if (result.length === 0) {
           setDisplayMessage(`タスクはありません。`);
         }
       } catch (error) {

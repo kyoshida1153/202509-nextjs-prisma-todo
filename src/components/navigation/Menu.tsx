@@ -25,51 +25,56 @@ const Menu: React.FC<MenuProps> = ({ currentUser }) => {
   }, []);
 
   return (
-    <div className="relative">
-      <div className="relative h-8 w-8 cursor-pointer" onClick={toggleOpen}>
-        <Image
-          src={currentUser?.image || "/default.png"}
-          className="rounded-full object-cover"
-          alt="avatar"
-          fill
-        />
+    <>
+      <div className="text-[14px]">
+        {currentUser ? `${currentUser?.name} さん` : "ログインしてください"}
       </div>
-
-      {isOpen && (
-        <div className="absolute right-0 z-10 w-40 overflow-hidden rounded-lg bg-white text-sm shadow-lg shadow-gray-100">
-          <div className="cursor-pointer">
-            {currentUser ? (
-              <>
-                <MenuItem
-                  label="ログアウト"
-                  onClick={() => {
-                    signOut();
-                    setIsOpen(false);
-                  }}
-                />
-              </>
-            ) : (
-              <>
-                <MenuItem
-                  label="ログイン"
-                  onClick={() => {
-                    loginModal.onOpen();
-                    setIsOpen(false);
-                  }}
-                />
-                <MenuItem
-                  label="サインアップ"
-                  onClick={() => {
-                    signupModal.onOpen();
-                    setIsOpen(false);
-                  }}
-                />
-              </>
-            )}
-          </div>
+      <div className="relative">
+        <div className="relative h-8 w-8 cursor-pointer" onClick={toggleOpen}>
+          <Image
+            src={currentUser?.image || "/default.png"}
+            className="rounded-full object-cover"
+            alt="avatar"
+            fill
+          />
         </div>
-      )}
-    </div>
+
+        {isOpen && (
+          <div className="absolute right-0 z-10 w-40 overflow-hidden rounded-lg bg-white text-sm shadow-lg shadow-gray-100">
+            <div className="cursor-pointer">
+              {currentUser ? (
+                <>
+                  <MenuItem
+                    label="ログアウト"
+                    onClick={() => {
+                      signOut();
+                      setIsOpen(false);
+                    }}
+                  />
+                </>
+              ) : (
+                <>
+                  <MenuItem
+                    label="ログイン"
+                    onClick={() => {
+                      loginModal.onOpen();
+                      setIsOpen(false);
+                    }}
+                  />
+                  <MenuItem
+                    label="サインアップ"
+                    onClick={() => {
+                      signupModal.onOpen();
+                      setIsOpen(false);
+                    }}
+                  />
+                </>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

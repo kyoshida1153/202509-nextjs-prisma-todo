@@ -24,21 +24,29 @@ export default function TodoDetail({ id }: Props) {
           }
         );
 
-        if (!response.ok) {
-          throw new Error(`response.status: ${response.status}`);
-        }
+        console.log(response);
+        if (!response.ok) throw new Error(String(response.status));
 
-        const { message, result } = await response.json();
-        // console.log(message, result);
+        // const { message, result } = await response.json();
+        const { result } = await response.json();
         setTodo(result);
 
-        if (!result) {
-          setDisplayMessage(`選択したタスクは存在しません。`);
-        }
+        if (!result) throw new Error("404");
       } catch (error) {
-        setDisplayMessage(
-          `エラーが発生しました。再度ページを更新しても解消されない場合はお問い合わせください。 ${error}`
-        );
+        if (error instanceof Error === false) throw null;
+
+        let errorMessage: string = "";
+        switch (error.message) {
+          case "401":
+          case "404":
+            errorMessage = `タスクは存在しません。`;
+            break;
+          default:
+            errorMessage = `エラーが発生しました。再度ページを更新しても解消されない場合はお問い合わせください。`;
+
+            break;
+        }
+        setDisplayMessage(errorMessage);
       }
       setLoading(false);
     };
@@ -59,8 +67,9 @@ export default function TodoDetail({ id }: Props) {
         throw new Error(`response.status: ${response.status}`);
       }
 
-      const { message, result } = await response.json();
+      // const { message, result } = await response.json();
       // console.log(message, result);
+      await response.json();
       setTodo(undefined);
       setDisplayMessage(`削除しました。`);
     } catch (error) {

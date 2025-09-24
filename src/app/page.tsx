@@ -1,17 +1,10 @@
 import Link from "next/link";
 import TodoList from "@/components/todo/TodoList";
 import TodoListOrderForm from "@/components/todo/TodoListOrderForm";
-import getCurrentUser from "@/actions/getCurrentUser";
 
 export default async function Home() {
-  const currentUser = await getCurrentUser();
-
   return (
     <>
-      <div className="text-center">
-        {currentUser ? <div>認証中</div> : <div>未認証</div>}
-      </div>
-
       <h1 className="text-2xl py-2 [border-bottom:2px_solid_#e2e8f0]">TODO</h1>
       <div className="flex justify-center">
         <Link

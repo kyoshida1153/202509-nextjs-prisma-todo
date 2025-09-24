@@ -27,8 +27,9 @@ export default function TodoEditForm({ id }: Props) {
           throw new Error(`response.status: ${response.status}`);
         }
 
-        const { message, result } = await response.json();
+        // const { message, result } = await response.json();
         // console.log(message, result);
+        const { result } = await response.json();
         setTodo(result);
 
         if (!result) {

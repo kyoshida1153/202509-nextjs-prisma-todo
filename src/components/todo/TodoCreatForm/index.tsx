@@ -36,8 +36,9 @@ export default function TodoCreatForm() {
         throw new Error(`response.status: ${response.status}`);
       }
 
-      const { message, result } = await response.json();
+      // const { message, result } = await response.json();
       // console.log(message, result);
+      await response.json();
       setDisplayMessage(`作成しました。`);
     } catch (error) {
       console.log("error", error);

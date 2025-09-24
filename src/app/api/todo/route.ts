@@ -1,9 +1,15 @@
 import { type NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import getCurrentUser from "@/actions/getCurrentUser";
 
 // 一覧取得
 export async function GET(request: NextRequest) {
   try {
+    // 認証チェック
+    const currentUser = await getCurrentUser();
+    const userId = currentUser?.id ?? "";
+    if (!currentUser && !userId) throw new Error("401");
+
     await prisma.$connect();
 
     const params = request.nextUrl.searchParams;
@@ -11,6 +17,7 @@ export async function GET(request: NextRequest) {
     const createdAt = Number(params.get("createdAt"));
 
     const where = {};
+    Object.assign(where, { userId: userId });
     if (statusId > 0) {
       Object.assign(where, { statusId: statusId });
     }
@@ -27,19 +34,29 @@ export async function GET(request: NextRequest) {
       where,
       orderBy,
     });
+    if (!result) throw new Error("404");
 
-    return NextResponse.json(
-      {
-        message: "Success",
-        result,
-      },
-      { status: 200 }
-    );
+    return NextResponse.json({ message: "Success", result }, { status: 200 });
   } catch (error) {
-    return NextResponse.json(
-      { message: "Error", result: error },
-      { status: 500 }
-    );
+    if (error instanceof Error === false) throw null;
+
+    let message: string = "";
+    let status: number = 0;
+    switch (error.message) {
+      case "401":
+        message = "Unauthorized";
+        status = 401;
+        break;
+      case "404":
+        message = "Not Found";
+        status = 404;
+        break;
+      default:
+        message = "Error";
+        status = 500;
+        break;
+    }
+    return NextResponse.json({ message }, { status });
   } finally {
     await prisma.$disconnect();
   }
@@ -48,22 +65,39 @@ export async function GET(request: NextRequest) {
 // 投稿
 export async function POST(request: Request) {
   try {
-    const userId = "aff135e2-f612-406e-afe6-3b0bff888c0b";
+    // 認証チェック
+    const currentUser = await getCurrentUser();
+    const userId = currentUser?.id ?? "";
+    if (!currentUser && !userId) throw new Error("401");
 
     const { title, memo, statusId } = await request.json();
     await prisma.$connect();
     const result = await prisma.todo.create({
       data: { title, memo, statusId, userId },
     });
-    return NextResponse.json(
-      { message: "Success", result: result },
-      { status: 201 }
-    );
+    if (!result) throw new Error("404");
+
+    return NextResponse.json({ message: "Success", result }, { status: 201 });
   } catch (error) {
-    return NextResponse.json(
-      { message: "Error", result: error },
-      { status: 500 }
-    );
+    if (error instanceof Error === false) throw null;
+
+    let message: string = "";
+    let status: number = 0;
+    switch (error.message) {
+      case "401":
+        message = "Unauthorized";
+        status = 401;
+        break;
+      case "404":
+        message = "Not Found";
+        status = 404;
+        break;
+      default:
+        message = "Error";
+        status = 500;
+        break;
+    }
+    return NextResponse.json({ message }, { status });
   } finally {
     await prisma.$disconnect();
   }

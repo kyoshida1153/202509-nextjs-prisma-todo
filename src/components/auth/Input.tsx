@@ -1,6 +1,6 @@
 "use client";
 
-import { FieldValues, UseFormRegister } from "react-hook-form";
+import { FieldValues, UseFormRegister, FieldErrors } from "react-hook-form";
 
 type InputProps = {
   id: string;
@@ -9,7 +9,7 @@ type InputProps = {
   disabled?: boolean;
   required?: boolean;
   register: UseFormRegister<FieldValues>;
-  errors: any;
+  errors: FieldErrors;
 };
 
 // 入力フォーム
@@ -42,7 +42,7 @@ const Input: React.FC<InputProps> = ({
 
       {errors[id] && (
         <div className="my-3 text-center text-sm text-red-500">
-          {errors[id].message}
+          {errors[id].message as string}
         </div>
       )}
     </div>

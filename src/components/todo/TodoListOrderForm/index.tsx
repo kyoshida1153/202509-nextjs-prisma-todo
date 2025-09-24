@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useTodosStore } from "../stores";
+import { useTodoListState, useTodosStore } from "../stores";
 import { useDebounce } from "./hooks";
 
 type OrderParams = {
@@ -10,6 +10,7 @@ type OrderParams = {
 
 export default function TodoListOrderForm() {
   const { setTodos } = useTodosStore();
+  const { setLoading, setDisplayMessage } = useTodoListState();
   const [params, setParams] = useState<OrderParams>({});
   const debouncedParams = useDebounce(params, 300);
 
@@ -30,11 +31,13 @@ export default function TodoListOrderForm() {
   };
 
   useEffect(() => {
-    if (Object.keys(debouncedParams).length === 0) return; // 初期は無視
+    // debounce処理（連打対策）、初回は動作させない
+    if (Object.keys(debouncedParams).length === 0) return;
 
     console.log("DB 通信発火:", debouncedParams);
 
     const getTodos = async (params: OrderParams) => {
+      setLoading(true);
       try {
         const queryString = new URLSearchParams(params).toString();
 
@@ -47,15 +50,22 @@ export default function TodoListOrderForm() {
         );
 
         if (!response.ok) {
-          throw new Error(`response.status: ${response.status}`);
+          throw new Error(`ステータスコード: ${response.status}`);
         }
 
-        const { message, result } = await response.json();
-        // console.log(message, result);
+        // const { message, result } = await response.json();
+        const { result } = await response.json();
         setTodos(result);
+
+        if (result.length === 0) {
+          setDisplayMessage(`タスクはありません。`);
+        }
       } catch (error) {
-        console.error(error);
+        setDisplayMessage(
+          `エラーが発生しました。再度ページを更新しても解消されない場合はお問い合わせください。 ${error}`
+        );
       }
+      setLoading(false);
     };
 
     getTodos(debouncedParams);
